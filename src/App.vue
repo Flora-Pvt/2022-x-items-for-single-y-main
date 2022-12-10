@@ -1,6 +1,19 @@
 <script setup>
-import ItemSelect from './components/ItemSelect.vue'
-import ComparisonSummary from './components/ComparisonSummary.vue'
+import ItemSelect from "./components/ItemSelect.vue";
+import ComparisonSummary from "./components/ComparisonSummary.vue";
+import { useItemComparison } from "./composables/itemComparison";
+const { availableItems, itemsToCompare } = useItemComparison();
+
+const getProducts = () => {
+  fetch("https://dummyjson.com/products")
+    .then((res) => res.json())
+    .then((data) => {
+      availableItems.value = data.products;
+    })
+    .catch(() => alert("An error occured"));
+};
+
+getProducts();
 </script>
 
 <template>
@@ -10,6 +23,6 @@ import ComparisonSummary from './components/ComparisonSummary.vue'
       <ItemSelect />
       <ItemSelect />
     </div>
-    <ComparisonSummary />
+    <ComparisonSummary v-if="itemsToCompare.length === 2" />
   </div>
 </template>
